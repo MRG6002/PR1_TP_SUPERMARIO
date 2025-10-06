@@ -9,15 +9,19 @@ import java.util.Objects;
  * TODO: Immutable class to encapsulate and manipulate positions in the game board
  * 
  */
-public class Position {
+public final class Position {
 
-	private int col;
-	private int row;
+	private final int col;
+	private final int row;
 
 	public Position(int x, int y) {
-		if(esValida(x,y)) {
+		if(Position.esValida(x,y)) {
 			this.col = x;
 			this.row = y;
+		}
+		else { //inicializacion a -1 por si acaso es posicion inválida. Entonces no será detectado el objeto y no causa error.
+			this.col = -1;
+			this.row = -1;
 		}
 	}
 
@@ -49,8 +53,12 @@ public class Position {
 		return Objects.hash(col,row);
 	}
 	
-	public Position posArriba() {
-		return new Position(this.col, this.row - 1);
+	public Position sumar(Action act) {
+		return new Position(this.col + act.getX(), this.row + act.getY());
+	}
+	
+	public Position sumar(Position pos) {
+		return new Position(this.col + pos.col, this.row + pos.row);
 	}
 
 	
