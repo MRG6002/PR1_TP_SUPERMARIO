@@ -12,12 +12,13 @@ public class Mario {
 	private boolean derecha;
 	private boolean parado;
 	private boolean big;
+	private Game game;
 	
 	/**
 	 *  Implements the automatic update	
 	 */
-	public void update() {
-		//TODO fill your code
+	public void update() { //actualizaciones para Mario
+		
 	}
 	
 	public String getIcon() {
@@ -44,9 +45,9 @@ public class Mario {
 		this.parado = true;
 	}
 	public Mario(Position pos) {
-		if(pos.esValida() && pos.posArriba().esValida()) {
+		if(pos.esValida() && pos.sumar(new Position (0, -1)).esValida()) {
 			this.pos = new Position(pos);
-			this.posGrande = new Position(pos.posArriba());
+			this.posGrande = new Position(pos.sumar(new Position (0, -1)));
 		}
 		this.derecha = true;
 		this.big = true;
@@ -56,9 +57,9 @@ public class Mario {
 		return mario.pos.toString() + " " + mario.getIcon() + " " + mario.big; 
 	}
 	public void cambiarPos(Position pos) {
-		if(pos.esValida() && pos.posArriba().esValida()) {
+		if(pos.esValida() && pos.sumar(new Position (0, -1)).esValida()) {
 			this.pos = new Position(pos);
-			this.posGrande = new Position(pos.posArriba());
+			this.posGrande = new Position(pos.sumar(new Position (0, -1)));
 		}
 	}
 	public void hacerGrande(boolean grande) {

@@ -30,4 +30,8 @@ public class Goomba {
 	public boolean estaEnPos(Position pos) {
 		return this.pos.equals(pos);
 	}
+	
+	public void update() { //actualizaciones para Goombas
+		if ()
+	}
 }

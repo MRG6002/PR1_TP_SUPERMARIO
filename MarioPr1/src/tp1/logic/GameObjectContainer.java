@@ -7,9 +7,9 @@ import java.util.List;
 
 import tp1.logic.gameobjects.Land;
 import tp1.logic.gameobjects.Mario;
-import tp1.view.Messages;
 import tp1.logic.gameobjects.ExitDoor;
 import tp1.logic.gameobjects.Goomba;
+import tp1.view.Messages;
 
 
 public class GameObjectContainer {
@@ -23,15 +23,12 @@ public class GameObjectContainer {
 		this.listLand.add(land);
 	}
 	private boolean hayLandAqui(Position pos) {
-		boolean loHay = false;
-		int cont = 0; 
-		while(cont < this.listLand.size() && !loHay) {
-			if(this.listLand.get(cont).estaEnPos(pos)) {
-				loHay = true;
+		for(Land land: listLand) {
+			if(land.estaEnPos(pos)) {
+				return true;
 			}
-			cont++;
 		}
-		return loHay;
+		return false;
 	}
 	
 	private ExitDoor door;
@@ -71,6 +68,23 @@ public class GameObjectContainer {
 		this.door = new ExitDoor (new Position (0, 1));
 	}
 	
+	public boolean marioEnDoor() { //esto hay que cambiarlo 
+		int x = 0, y = 0;
+		boolean encontrado = false;
+		while (x < Game.DIM_X && !encontrado) {
+			while(y < Game.DIM_Y && !encontrado) {
+				if(mario.estaEnPos(new Position(x, y))) {
+					if(door.estaEnPos(new Position(x,y))){
+						encontrado = true;
+					}
+				}
+				y++;
+			}
+			x++;
+		}
+		return encontrado; //este no es necesario, pero lo ponemos por si acaso.
+	}
+	
 	public String ContainerEnPos(Position pos) {
 		String aux = "";
 		if(this.mario.estaEnPos(pos)) {
@@ -86,6 +100,13 @@ public class GameObjectContainer {
 			aux = Messages.LAND;
 		}
 		return aux;
+	}
+	
+	public boolean GoombaSobreSuelo(Goomba goomba) {
+		boolean sobreSuelo = false;
+		for(Land land: this.listLand) {
+			if(land.estaEnPos(new Position (goomba.pos)))
+		}
 	}
 	
 }
