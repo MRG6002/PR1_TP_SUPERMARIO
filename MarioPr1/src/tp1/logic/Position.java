@@ -15,16 +15,10 @@ public final class Position {
 	private final int row;
 
 	public Position(int x, int y) {
-		if(Position.esValida(x,y)) {
-			this.col = x;
-			this.row = y;
-		}
-		else { //inicializacion a -1 por si acaso es posicion inválida. Entonces no será detectado el objeto y no causa error.
-			this.col = -1;
-			this.row = -1;
-		}
+		this.col = x;
+		this.row = y;
 	}
-
+	
 	public Position(Position pos) {
 			this.col = pos.col;
 			this.row = pos.row;
@@ -59,6 +53,14 @@ public final class Position {
 	
 	public Position sumar(Position pos) {
 		return new Position(this.col + pos.col, this.row + pos.row);
+	}
+	
+	public boolean EsBorde() {
+		return (this.col == 0 || this.col == Game.DIM_X - 1);
+	}
+
+	public boolean estaAbajo() {
+		return this.row == Game.DIM_Y - 1;
 	}
 
 	

@@ -47,7 +47,7 @@ public class Controller {
 		else if(prompt[0].equalsIgnoreCase("update") || prompt[0].equalsIgnoreCase("u") || prompt[0].equals("")) {
 			view.showGame();
 		}
-		else  view.showMessage(Messages.ERROR + Messages.UNKNOWN_COMMAND + "comandoTecleadoPorElUsuario");
+		else  view.showMessage(Messages.ERROR.formatted(Messages.UNKNOWN_COMMAND.formatted("comandoTecleadoPorElUsuario")));
 		return exit;
 	}
 	

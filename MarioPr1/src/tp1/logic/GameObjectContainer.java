@@ -102,11 +102,4 @@ public class GameObjectContainer {
 		return aux;
 	}
 	
-	public boolean GoombaSobreSuelo(Goomba goomba) {
-		boolean sobreSuelo = false;
-		for(Land land: this.listLand) {
-			if(land.estaEnPos(new Position (goomba.pos)))
-		}
-	}
-	
 }
