@@ -2,6 +2,8 @@ package tp1.logic.gameobjects;
 
 import java.util.List;
 
+import tp1.logic.Action;
+import tp1.logic.ActionList;
 import tp1.logic.Game;
 import tp1.logic.Position;
 import tp1.view.Messages;
@@ -14,6 +16,7 @@ public class Mario {
 	private boolean derecha;
 	private boolean parado;
 	private boolean big;
+	private ActionList actions;
 	private Game game;
 	
 	/**
@@ -22,22 +25,42 @@ public class Mario {
 	public boolean update(List <Land> listLand) { //actualizaciones para Mario
 		//automático
 		boolean marioMuere = false;
-		Position pos;
-		if(this.derecha) pos = new Position(1, 0);
-		else pos = new Position(-1, 0);
-		if(this.MarioColisiona(listLand, new Position(0,1))) {
-			if(this.MarioColisiona(listLand, pos) || this.pos.EsBorde()) {
-				this.derecha = !this.derecha;
-				if(this.derecha) pos = new Position(1, 0);
-				else pos = new Position(-1, 0);
+		if(this.actions.size() == 0) {
+			Position pos;
+			if(this.derecha) pos = new Position(1, 0);
+			else pos = new Position(-1, 0);
+			if(this.MarioColisiona(listLand, new Position(0,1))) {
+				if(this.MarioColisiona(listLand, pos) || this.pos.EsBorde(this.derecha)) {
+					this.derecha = !this.derecha;
+					if(this.derecha) pos = new Position(1, 0);
+					else pos = new Position(-1, 0);
+				}
+				this.cambiarPos(this.pos.sumar(pos));
 			}
-			this.cambiarPos(this.pos.sumar(pos));
+			else {
+				if(this.pos.estaAbajo()) {
+					marioMuere = true;
+				}
+				else this.cambiarPos(this.pos.sumar(new Position(0, 1)));
+			}
 		}
 		else {
-			if(this.pos.estaAbajo()) {
-				marioMuere = true;
+			for(Action action: this.actions) {
+				if(this.MarioColisiona(listLand, new Position(0,1))) {
+					if(this.MarioColisiona(listLand, pos) || this.pos.EsBorde(this.derecha)) {
+						this.derecha = !this.derecha;
+						if(this.derecha) pos = new Position(1, 0);
+						else pos = new Position(-1, 0);
+					}
+					this.cambiarPos(this.pos.sumar(pos));
+				}
+				else {
+					if(this.pos.estaAbajo()) {
+						marioMuere = true;
+					}
+					else this.cambiarPos(this.pos.sumar(new Position(0, 1)));
+				}
 			}
-			else this.cambiarPos(this.pos.sumar(new Position(0, 1)));
 		}
 		return marioMuere;
 	}
@@ -88,10 +111,25 @@ public class Mario {
 	}
 	public void cambiarPos(Position pos) {
 		if(pos.esValida() && pos.sumar(new Position (0, -1)).esValida()) {
+			this.parado = false;
+			if(this.pos.enDerechaDe(pos)) this.derecha = false;
+			else if(this.pos.equals(pos)) this.parado = true;
+			else this.derecha = true;
 			this.pos = new Position(pos);
 			this.posGrande = new Position(pos.sumar(new Position (0, -1)));
+			
 		}
 	}
+	
+	public void addAction(ActionList actions) {
+		this.actions = actions;
+	}
+	
+	public boolean estaEnPos(Position pos) {
+		return this.pos.equals(pos) || (this.posGrande != null && this.posGrande.equals(pos));
+	}
+	
+	//hay que quitar estos
 	public void hacerGrande(boolean grande) {
 		this.big = grande;
 	}
@@ -106,8 +144,5 @@ public class Mario {
 	}
 	public boolean esParado() {
 		return this.parado;
-	}
-	public boolean estaEnPos(Position pos) {
-		return this.pos.equals(pos) || (this.posGrande != null && this.posGrande.equals(pos));
 	}
 }

@@ -25,6 +25,9 @@ public enum Action {
 		return y;
 	}
 	
+	public Position actAPosition() {
+		return new Position(this.x, this.y);
+	}
 	//TODO fill your code
 	
 }

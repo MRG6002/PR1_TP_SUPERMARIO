@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ActionList {
-	private List<Action> actionList;
+	public List<Action> actionList;
 	
 	public ActionList() {
 		actionList = new ArrayList<>();
@@ -12,5 +12,9 @@ public class ActionList {
 	
 	public void add(Action act) {
 		this.actionList.add(act);
+	}
+
+	public int size() {
+		return this.actionList.size();
 	}
 }

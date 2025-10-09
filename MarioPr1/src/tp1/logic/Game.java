@@ -7,6 +7,10 @@ import tp1.logic.gameobjects.ExitDoor;
 import tp1.logic.gameobjects.Mario;
 import tp1.logic.gameobjects.Goomba;
 
+import java.util.List;
+
+import tp1.logic.Action;
+
 public class Game {
 
 	public static final int DIM_X = 30;
@@ -49,7 +53,8 @@ public class Game {
 		this.GameObjectContainer.add(new Mario(new Position(0, 12)));
 		this.GameObjectContainer.add(new ExitDoor(new Position(29, 12)));
 		//Goombas
-		this.GameObjectContainer.add(new Goomba(new Position(19, 0)));
+		//this.GameObjectContainer.add(new Goomba(new Position(19, 0)));
+		this.GameObjectContainer.add(new Goomba(new Position(16, 13)));
 	}
 	
 	private void initLevel1() {
@@ -162,6 +167,13 @@ public class Game {
 		return this.playerLoses() || this.playerWins();
 	}
 	
+	public void update() {
+		this.GameObjectContainer.update();
+	}
+	
+	public void addAction(ActionList action) {
+		this.GameObjectContainer.addAction(action);
+	}
 	/*
 	private void initLevel0() {
 		this.nLevel = 0;

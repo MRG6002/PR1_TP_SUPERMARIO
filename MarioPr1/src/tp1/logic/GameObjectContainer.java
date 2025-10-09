@@ -44,15 +44,12 @@ public class GameObjectContainer {
 		this.listGoomba.add(goomba);
 	}
 	private boolean hayGoombaAqui(Position pos) {
-		boolean loHay = false;
-		int cont = 0; 
-		while(cont < this.listGoomba.size() && !loHay) {
-			if(this.listGoomba.get(cont).estaEnPos(pos)) {
-				loHay = true;
+		for(Goomba goomba: this.listGoomba) {
+			if(goomba.estaEnPos(pos)) {
+				return true;
 			}
-			cont++;
 		}
-		return loHay;
+		return false;
 	}
 	
 	private Mario mario;
@@ -102,4 +99,17 @@ public class GameObjectContainer {
 		return aux;
 	}
 	
+	public void update() {
+		if(this.mario.update(this.listLand)) {
+			
+		}
+		for(Goomba goomba: this.listGoomba) {
+			goomba.update(this.listLand);
+		}
+		this.listGoomba.removeIf(goomba -> !goomba.estaVivo());
+	}
+	
+	public void addAction(ActionList actions) {
+		this.mario.addAction(actions);
+	}
 }

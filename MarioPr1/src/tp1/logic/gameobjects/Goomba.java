@@ -7,9 +7,14 @@ import tp1.view.Messages;
 public class Goomba {
 	private Position pos;
 	private boolean izquierda = true;
+	private boolean vivo = true;
 	
 	public String getIcon() {
 		return Messages.GOOMBA;
+	}
+	
+	public boolean estaVivo() {
+		return this.vivo;
 	}
 	
 	public Goomba (int x, int y) {
@@ -33,13 +38,12 @@ public class Goomba {
 		return this.pos.equals(pos);
 	}
 	
-	public boolean update(List <Land> listLand) { //actualizaciones para Goombas
-		boolean goombaMuere = false;
+	public void update(List <Land> listLand) { //actualizaciones para Goombas
 		Position pos;
 		if(this.izquierda) pos = new Position(-1, 0);
 		else pos = new Position(1, 0);
 		if(this.GoombaColisiona(listLand, new Position(0,1))) {
-			if(this.GoombaColisiona(listLand, pos) || this.pos.EsBorde()) {
+			if(this.GoombaColisiona(listLand, pos) || this.pos.EsBorde(!this.izquierda)) {
 				this.izquierda = !this.izquierda;
 				if(this.izquierda) pos = new Position(-1, 0);
 				else pos = new Position(1, 0);
@@ -48,11 +52,10 @@ public class Goomba {
 		}
 		else {
 			if(this.pos.estaAbajo()) {
-				goombaMuere = true;
+				this.vivo = false;
 			}
 			else this.cambiarPos(this.pos.sumar(new Position(0, 1)));
 		}
-		return goombaMuere;
 	}
 	
 	public boolean GoombaColisiona(List <Land> listLand, Position pos) {

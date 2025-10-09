@@ -6,6 +6,8 @@ import tp1.logic.Game;
 import tp1.view.GameView;
 import tp1.view.ViewInterface;
 import tp1.view.Messages;
+import tp1.logic.Action;
+import tp1.logic.ActionList;
 
 /**
  *  Accepts user input and coordinates the game execution logic
@@ -28,9 +30,11 @@ public class Controller {
 	
 	private boolean commands(String [] prompt) {
 		boolean exit = false;
+		ActionList actions = new ActionList();
+		
 		if(prompt[0].equalsIgnoreCase("exit") || prompt[0].equalsIgnoreCase("e")) exit = true;	
 		else if(prompt[0].equalsIgnoreCase("help") || prompt[0].equalsIgnoreCase("h")) {
-			for(int i = 0; i < 6; i++) {
+			for(int i = 0; i < Messages.HELP_LINES.length; i++) {
 				view.showMessage(Messages.HELP_LINES[i]);
 			}
 		}
@@ -42,12 +46,32 @@ public class Controller {
 			view.showGame();
 		}
 		else if(prompt[0].equalsIgnoreCase("action") || prompt[0].equalsIgnoreCase("a")) {
+			for(int i = 1; i < prompt.length; i++) {
+				if(prompt[i].equalsIgnoreCase("up") || prompt[i].equalsIgnoreCase("u")) {
+					actions.add(Action.UP);
+				}
+				else if(prompt[i].equalsIgnoreCase("down") || prompt[i].equalsIgnoreCase("d")) {
+					actions.add(Action.UP);
+				}
+				else if(prompt[i].equalsIgnoreCase("right") || prompt[i].equalsIgnoreCase("r")) {
+					actions.add(Action.RIGHT);
+				}
+				else if(prompt[i].equalsIgnoreCase("left") || prompt[i].equalsIgnoreCase("l")) {
+					actions.add(Action.LEFT);
+				}
+				else if(prompt[i].equalsIgnoreCase("stop") || prompt[i].equalsIgnoreCase("s")) {
+					actions.add(Action.STOP);
+				}
+				else Messages.ERROR.formatted(Messages.UNKNOWN_ACTION.formatted(prompt[i]));
+			}
+			game.update();
 			view.showGame();
 		}
 		else if(prompt[0].equalsIgnoreCase("update") || prompt[0].equalsIgnoreCase("u") || prompt[0].equals("")) {
+			game.update();
 			view.showGame();
 		}
-		else  view.showMessage(Messages.ERROR.formatted(Messages.UNKNOWN_COMMAND.formatted("comandoTecleadoPorElUsuario")));
+		else  view.showMessage(Messages.ERROR.formatted(Messages.UNKNOWN_COMMAND.formatted(prompt[0])));
 		return exit;
 	}
 	

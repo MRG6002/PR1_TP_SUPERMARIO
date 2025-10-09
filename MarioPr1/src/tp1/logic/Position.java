@@ -55,13 +55,18 @@ public final class Position {
 		return new Position(this.col + pos.col, this.row + pos.row);
 	}
 	
-	public boolean EsBorde() {
-		return (this.col == 0 || this.col == Game.DIM_X - 1);
+	public boolean EsBorde(boolean derecha) {
+		return ((this.col == 0 && !derecha) || (this.col == Game.DIM_X - 1 && derecha));
 	}
 
 	public boolean estaAbajo() {
 		return this.row == Game.DIM_Y - 1;
 	}
+
+	public boolean enDerechaDe(Position pos) {
+		return pos.col < this.col;
+	}
+	
 
 	
 }
