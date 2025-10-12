@@ -4,14 +4,10 @@ package tp1.control;
 
 import tp1.logic.Game;
 import tp1.view.GameView;
-import tp1.view.ViewInterface;
 import tp1.view.Messages;
 import tp1.logic.Action;
-import tp1.logic.ActionList;
 
-/**
- *  Accepts user input and coordinates the game execution logic
- */
+
 public class Controller {
 
 	private Game game;
@@ -20,17 +16,11 @@ public class Controller {
 	public Controller(Game game, GameView view) {
 		this.game = game;
 		this.view = view;
+		this.game.pasarGameAMario(game);
 	}
-
-
-	/**
-	 * Runs the game logic, coordinate Model(game) and View(view)
-	 * 
-	 */
 	
 	private boolean commands(String [] prompt) {
 		boolean exit = false;
-		ActionList actions = new ActionList();
 		
 		if(prompt[0].equalsIgnoreCase("exit") || prompt[0].equalsIgnoreCase("e")) exit = true;	
 		else if(prompt[0].equalsIgnoreCase("help") || prompt[0].equalsIgnoreCase("h")) {
@@ -48,19 +38,19 @@ public class Controller {
 		else if(prompt[0].equalsIgnoreCase("action") || prompt[0].equalsIgnoreCase("a")) {
 			for(int i = 1; i < prompt.length; i++) {
 				if(prompt[i].equalsIgnoreCase("up") || prompt[i].equalsIgnoreCase("u")) {
-					actions.add(Action.UP);
+					game.addAction(Action.UP);
 				}
 				else if(prompt[i].equalsIgnoreCase("down") || prompt[i].equalsIgnoreCase("d")) {
-					actions.add(Action.UP);
+					game.addAction(Action.DOWN);
 				}
 				else if(prompt[i].equalsIgnoreCase("right") || prompt[i].equalsIgnoreCase("r")) {
-					actions.add(Action.RIGHT);
+					game.addAction(Action.RIGHT);
 				}
 				else if(prompt[i].equalsIgnoreCase("left") || prompt[i].equalsIgnoreCase("l")) {
-					actions.add(Action.LEFT);
+					game.addAction(Action.LEFT);
 				}
 				else if(prompt[i].equalsIgnoreCase("stop") || prompt[i].equalsIgnoreCase("s")) {
-					actions.add(Action.STOP);
+					game.addAction(Action.STOP);
 				}
 				else Messages.ERROR.formatted(Messages.UNKNOWN_ACTION.formatted(prompt[i]));
 			}
@@ -80,7 +70,6 @@ public class Controller {
 		view.showWelcome();
 		view.showGame();
 		boolean exit = false;
-		//TODO fill your code: The main loop that displays the game, asks the user for input, and executes the action.
 		while(!game.isFinished() && !exit) {
 			prompt = view.getPrompt();
 			exit = commands(prompt);

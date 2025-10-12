@@ -2,10 +2,6 @@
 
 package tp1.logic;
 
-/**
- * Represents the allowed actions in the game
- *
- */
 public enum Action {
 	LEFT(-1,0), RIGHT(1,0), DOWN(0,1), UP(0,-1), STOP(0,0);
 	
@@ -24,10 +20,4 @@ public enum Action {
 	public int getY() {
 		return y;
 	}
-	
-	public Position actAPosition() {
-		return new Position(this.x, this.y);
-	}
-	//TODO fill your code
-	
 }

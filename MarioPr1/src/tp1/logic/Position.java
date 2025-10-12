@@ -4,11 +4,8 @@ package tp1.logic;
 
 import java.util.Objects;
 
-/**
- * 
- * TODO: Immutable class to encapsulate and manipulate positions in the game board
- * 
- */
+import tp1.view.Messages;
+
 public final class Position {
 
 	private final int col;
@@ -27,12 +24,9 @@ public final class Position {
 	public boolean esValida() {
 		 return (this.col >= 0 & this.col < Game.DIM_X && this.row >= 0 && this.row < Game.DIM_Y);
 	}
-	static public boolean esValida(int x, int y) {
-		 return (x >= 0 & x < Game.DIM_X && y >= 0 && y < Game.DIM_Y);
-	}
 	
 	public String toString() {
-		return "(" + this.col + " " + this.row + ")";
+		return Messages.POSITION.formatted(this.col, this.row);
 	}
 	
 	@Override
@@ -45,10 +39,6 @@ public final class Position {
 	@Override 
 	public int hashCode() {
 		return Objects.hash(col,row);
-	}
-	
-	public Position sumar(Action act) {
-		return new Position(this.col + act.getX(), this.row + act.getY());
 	}
 	
 	public Position sumar(Position pos) {
@@ -67,6 +57,12 @@ public final class Position {
 		return pos.col < this.col;
 	}
 	
-
+	public boolean enIzquierdaDe(Position pos) {
+		return pos.col > this.col;
+	}
 	
+	public boolean encimaDe(Position pos) {
+		return this.row < pos.row;
+	}
+
 }

@@ -13,8 +13,8 @@ import tp1.view.Messages;
 
 
 public class GameObjectContainer {
-	//TODO fill your code
 	
+	//lands
 	private List<Land> listLand;
 	public void listaLand() {
 		this.listLand = new ArrayList<>();
@@ -31,11 +31,13 @@ public class GameObjectContainer {
 		return false;
 	}
 	
+	//exit door
 	private ExitDoor door;
 	public void add(ExitDoor door) {
 		this.door = door;
 	}
 	
+	//goombas
 	private List<Goomba> listGoomba;
 	public void listaGoomba() {
 		this.listGoomba = new ArrayList<>();
@@ -52,12 +54,13 @@ public class GameObjectContainer {
 		return false;
 	}
 	
+	//mario
 	private Mario mario;
 	public void add(Mario mario) {
 		this.mario = mario;
 	}
 	
-	
+	//constructor general
 	public GameObjectContainer() {
 		this.listaLand();
 		this.listaGoomba();
@@ -65,25 +68,9 @@ public class GameObjectContainer {
 		this.door = new ExitDoor (new Position (0, 1));
 	}
 	
-	public boolean marioEnDoor() { //esto hay que cambiarlo 
-		int x = 0, y = 0;
-		boolean encontrado = false;
-		while (x < Game.DIM_X && !encontrado) {
-			while(y < Game.DIM_Y && !encontrado) {
-				if(mario.estaEnPos(new Position(x, y))) {
-					if(door.estaEnPos(new Position(x,y))){
-						encontrado = true;
-					}
-				}
-				y++;
-			}
-			x++;
-		}
-		return encontrado; //este no es necesario, pero lo ponemos por si acaso.
-	}
-	
+	//funciones
 	public String ContainerEnPos(Position pos) {
-		String aux = "";
+		String aux = Messages.EMPTY;
 		if(this.mario.estaEnPos(pos)) {
 			aux = mario.getIcon();
 		}
@@ -100,16 +87,24 @@ public class GameObjectContainer {
 	}
 	
 	public void update() {
-		if(this.mario.update(this.listLand)) {
-			
+		this.mario.update(this.listLand);
+		if(this.mario.interactWith(door)) {
+			this.mario.marioExited();
 		}
 		for(Goomba goomba: this.listGoomba) {
 			goomba.update(this.listLand);
 		}
+		this.doInteractionsFrom(this.mario);
 		this.listGoomba.removeIf(goomba -> !goomba.estaVivo());
 	}
 	
-	public void addAction(ActionList actions) {
-		this.mario.addAction(actions);
+	public void addAction(Action action) {
+		this.mario.addAction(action);
+	}
+	
+	public void doInteractionsFrom(Mario mario) {
+		for(int i = 0; i < this.listGoomba.size(); i++) {
+			mario.interactWith(this.listGoomba.get(i));
+		}
 	}
 }

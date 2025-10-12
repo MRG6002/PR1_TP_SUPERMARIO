@@ -7,10 +7,6 @@ import tp1.logic.gameobjects.ExitDoor;
 import tp1.logic.gameobjects.Mario;
 import tp1.logic.gameobjects.Goomba;
 
-import java.util.List;
-
-import tp1.logic.Action;
-
 public class Game {
 
 	public static final int DIM_X = 30;
@@ -19,11 +15,13 @@ public class Game {
 	private int puntos = 0;
 	private int numVidas = 3;
 	private int nLevel;
-	private Mario mario;
-	
+	private Mario mario = new Mario(new Position(0, 12));
+	private boolean partidaGanada = false;
 	private GameObjectContainer GameObjectContainer;
-
-	//TODO fill your code
+	
+	public void pasarGameAMario(Game game) {
+		this.mario.recibeGame(game);
+	}
 	
 	private void initLevel0() {
 		//Lands
@@ -49,12 +47,14 @@ public class Game {
 		this.GameObjectContainer.add(new Land(new Position(6, 9)));
 		this.GameObjectContainer.add(new Land(new Position(7, 9)));
 		this.GameObjectContainer.add(new Land(new Position(6, 5)));
+		//this.GameObjectContainer.add(new Land(new Position(2, 11)));
 		//Mario y puerta
-		this.GameObjectContainer.add(new Mario(new Position(0, 12)));
+		this.mario.cambiarPos(new Position(0, 12));
+		this.GameObjectContainer.add(this.mario);
 		this.GameObjectContainer.add(new ExitDoor(new Position(29, 12)));
 		//Goombas
-		//this.GameObjectContainer.add(new Goomba(new Position(19, 0)));
-		this.GameObjectContainer.add(new Goomba(new Position(16, 13)));
+		this.GameObjectContainer.add(new Goomba(new Position(19, 0)));
+		//this.GameObjectContainer.add(new Goomba(new Position(16, 13)));
 	}
 	
 	private void initLevel1() {
@@ -82,7 +82,8 @@ public class Game {
 		this.GameObjectContainer.add(new Land(new Position(7, 9)));
 		this.GameObjectContainer.add(new Land(new Position(6, 5)));
 		//Mario y puerta
-		this.GameObjectContainer.add(new Mario(new Position(0, 12)));
+		this.mario.cambiarPos(new Position(0, 12));
+		this.GameObjectContainer.add(this.mario);
 		this.GameObjectContainer.add(new ExitDoor(new Position(29, 12)));
 		//Goombas
 		this.GameObjectContainer.add(new Goomba(new Position(6, 12)));
@@ -95,7 +96,6 @@ public class Game {
 	}
 	
 	public Game(int nLevel) {
-		// TODO Auto-generated constructor stub
 		//Permitira a la larga preguntar si se quieren añadir mas mapas
 		this.GameObjectContainer = new GameObjectContainer();
 		if(nLevel == 0) {
@@ -128,6 +128,7 @@ public class Game {
 	}
 	
 	public void resetGame() { 
+		this.tiempoRestante = 100;
 		this.GameObjectContainer = new GameObjectContainer();
 		this.inicializarGameObjectContainer(this.nLevel);
 	}
@@ -138,7 +139,7 @@ public class Game {
 	}
 
 	public boolean playerWins() {
-		return GameObjectContainer.marioEnDoor();
+		return partidaGanada;
 	}
 
 	public int remainingTime() {
@@ -155,7 +156,6 @@ public class Game {
 
 	@Override
 	public String toString() {
-		// TODO returns a textual representation of the object
 		return this.numVidas + "vidas " + this.puntos + "ptos " + this.tiempoRestante + "s";
 	}
 
@@ -168,11 +168,30 @@ public class Game {
 	}
 	
 	public void update() {
+		this.tiempoRestante--;
 		this.GameObjectContainer.update();
+		
 	}
 	
-	public void addAction(ActionList action) {
+	public void doInteractionsFrom(Mario mario) {
+		this.GameObjectContainer.doInteractionsFrom(mario);
+	}
+	
+	public void addAction(Action action) {
 		this.GameObjectContainer.addAction(action);
+	}
+	
+	public void marioExited() {
+		this.puntos += this.tiempoRestante * 10;
+		this.partidaGanada = true;
+	}
+	
+	public void sumar100() {
+		this.puntos += 100;
+	}
+	
+	public void perderVida() {
+		if(this.numVidas > 0) numVidas--;
 	}
 	/*
 	private void initLevel0() {

@@ -1,3 +1,5 @@
+//Grupo 13: MarioRosellGarcía - XiangLin
+
 package tp1.logic.gameobjects;
 
 import tp1.logic.Position;
@@ -10,11 +12,6 @@ public class Land {
 		return Messages.LAND;
 	}
 	
-	public Land (int x, int y) {
-		if(Position.esValida(x,y)) {
-			this.pos = new Position(x, y);
-		}
-	}
 	public Land (Position pos) {
 		if(pos.esValida()) {
 			this.pos = new Position(pos);
@@ -23,5 +20,10 @@ public class Land {
 	
 	public boolean estaEnPos(Position pos) {
 		return this.pos.equals(pos);
+	}
+	
+	@Override
+	public String toString() {
+		return "Land " + this.pos.toString();
 	}
 }

@@ -1,3 +1,5 @@
+//Grupo 13: MarioRosellGarcía - XiangLin
+
 package tp1.logic.gameobjects;
 
 import tp1.logic.Position;
@@ -10,15 +12,16 @@ public class ExitDoor {
 		return Messages.EXIT_DOOR;
 	}
 	
-	public ExitDoor (int x, int y) {
-		this.pos = new Position(x, y);
-		
-	}
 	public ExitDoor (Position pos) {
 		this.pos = new Position(pos);
 	}
 	
 	public boolean estaEnPos(Position pos) {
 		return this.pos.equals(pos);
+	}
+	
+	@Override 
+	public String toString() {
+		return "Puerta " + this.pos.toString();
 	}
 }

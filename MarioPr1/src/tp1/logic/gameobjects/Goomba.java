@@ -1,3 +1,5 @@
+//Grupo 13: MarioRosellGarcía - XiangLin
+
 package tp1.logic.gameobjects;
 
 import java.util.List;
@@ -17,11 +19,6 @@ public class Goomba {
 		return this.vivo;
 	}
 	
-	public Goomba (int x, int y) {
-		if(Position.esValida(x,y)) {
-			this.pos = new Position(x, y);
-		}
-	}
 	public Goomba (Position pos) {
 		if(pos.esValida()) {
 			this.pos = new Position(pos);
@@ -67,4 +64,17 @@ public class Goomba {
 		return false;
 	}
 	
+	public boolean recieveInteraction(Mario mario) {
+		boolean hayContacto = false;
+		if(mario.estaEnPos(this.pos)) {
+			this.vivo = false;
+			hayContacto = true;
+		}
+		return hayContacto;
+	}
+	
+	@Override
+	public String toString() {
+		return "Goomba " + this.pos.toString() + " vivo:" + this.vivo + " izquierda:" + this.izquierda;
+	}
 }
