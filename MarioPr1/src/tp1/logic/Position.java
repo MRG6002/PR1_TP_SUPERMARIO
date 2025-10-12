@@ -22,7 +22,7 @@ public final class Position {
 	}
 	
 	public boolean esValida() {
-		 return (this.col >= 0 & this.col < Game.DIM_X && this.row >= 0 && this.row < Game.DIM_Y);
+		 return (this.col >= 0 && this.col < Game.DIM_X && this.row >= 0 && this.row < Game.DIM_Y);
 	}
 	
 	public String toString() {

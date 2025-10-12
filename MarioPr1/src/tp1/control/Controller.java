@@ -44,7 +44,7 @@ public class Controller {
 			
 		}
 		else if(prompt[0].equalsIgnoreCase("action") || prompt[0].equalsIgnoreCase("a")) {
-			if(prompt.length == 0) view.showMessage(Messages.ERROR.formatted(Messages.COMMAND_INCORRECT_PARAMETER_NUMBER));
+			if(prompt.length == 1) view.showMessage(Messages.ERROR.formatted(Messages.COMMAND_INCORRECT_PARAMETER_NUMBER));
 			else {
 				for(int i = 1; i < prompt.length; i++) {
 					if(prompt[i].equalsIgnoreCase("up") || prompt[i].equalsIgnoreCase("u")) {

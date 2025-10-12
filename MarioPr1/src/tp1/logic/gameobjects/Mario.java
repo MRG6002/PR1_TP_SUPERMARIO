@@ -47,7 +47,7 @@ public class Mario {
 			}
 			else {
 				if(this.pos.estaAbajo()) {
-					//mario muere o es herido
+					for(int i = 0; i < 3; i++) this.game.perderVida();//hacemos que muera al instante si se cae
 				}
 				else this.cambiarPos(this.pos.sumar(new Position(0, 1)));
 			}
@@ -56,6 +56,12 @@ public class Mario {
 			this.actions.restricciones();
 			for(int i = 0; i < this.actions.size(); i++) {
 				pos = new Position(this.actions.getX(i), this.actions.getY(i));
+				
+				if(this.pos.estaAbajo() && new Position(0, 1).equals(pos)) {
+					if(this.pos.estaAbajo()) {
+						for(int j = 0; j < 3; j++) this.game.perderVida();//hacemos que muera al instante si se cae
+					}
+				}
 				if(!this.MarioColisiona(listLand, pos)) {
 					this.cambiarPos(this.pos.sumar(pos));
 				}

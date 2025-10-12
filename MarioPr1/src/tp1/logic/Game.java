@@ -33,12 +33,13 @@ public class Game {
 			this.GameObjectContainer.add(new Land(new Position(i, 14)));
 			this.GameObjectContainer.add(new Land(new Position(i, 13)));
 		}
-		int cont = 0;
-		for(int i = 19 + cont; i < 27; i++) {
-			for(int j = 12; j > 11 - cont; j--) {
-				this.GameObjectContainer.add(new Land(new Position(i, j)));
+		int tamX = 8;
+		int posIniX = Game.DIM_X-3-tamX, posIniY = Game.DIM_Y-3;
+						
+		for(int col = 0; col < tamX; col++) {
+			for (int fila = 0; fila < col+1; fila++) {
+				GameObjectContainer.add(new Land(new Position(posIniX + col, posIniY - fila)));
 			}
-			cont++;
 		}
 		this.GameObjectContainer.add(new Land(new Position(9,12)));
 		this.GameObjectContainer.add(new Land(new Position(12, 12)));
@@ -67,13 +68,15 @@ public class Game {
 			this.GameObjectContainer.add(new Land(new Position(i, 14)));
 			this.GameObjectContainer.add(new Land(new Position(i, 13)));
 		}
-		int cont = 0;
-		for(int i = 19 + cont; i < 27; i++) {
-			for(int j = 12; j > 11 - cont; j--) {
-				this.GameObjectContainer.add(new Land(new Position(i, j)));
+		int tamX = 8;
+		int posIniX = Game.DIM_X-3-tamX, posIniY = Game.DIM_Y-3;
+						
+		for(int col = 0; col < tamX; col++) {
+			for (int fila = 0; fila < col+1; fila++) {
+				GameObjectContainer.add(new Land(new Position(posIniX + col, posIniY - fila)));
 			}
-			cont++;
 		}
+
 		this.GameObjectContainer.add(new Land(new Position(9,12)));
 		this.GameObjectContainer.add(new Land(new Position(12, 12)));
 		this.GameObjectContainer.add(new Land(new Position(2, 9)));
