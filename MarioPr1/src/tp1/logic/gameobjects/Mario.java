@@ -137,7 +137,7 @@ public class Mario {
 		}
 		this.derecha = true;
 		this.big = true;
-		this.parado = true;
+		this.parado = false;
 	}
 	
 	@Override
