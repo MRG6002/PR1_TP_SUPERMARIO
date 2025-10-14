@@ -74,7 +74,7 @@ public class Messages {
 //Symbols
 	public static final String EMPTY = "";
 	public static final String LAND = MyStringUtils.repeat("▓",ConsoleView.CELL_SIZE);
-	public static final String EXIT_DOOR = "🚪 ";
+	public static final String EXIT_DOOR = "🚪";
 	public static final String MARIO_STOP = "🧑";
 	public static final String MARIO_RIGHT = "🧍";//"🧍➡️";
 	public static final String MARIO_LEFT = "🚶";//"⬅️🚶";

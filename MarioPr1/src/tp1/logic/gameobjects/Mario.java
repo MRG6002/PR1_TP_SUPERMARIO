@@ -14,10 +14,12 @@ public class Mario {
 
 	private Position pos;
 	private Position posGrande;
-	private boolean derecha;
-	private boolean parado;
+	Action direccion;
 	private boolean big;
 	private boolean cayendo;
+	/*private boolean derecha;
+	private boolean parado;
+	*/
 	private ActionList actions = new ActionList();
 	private Game game;
 	
@@ -35,45 +37,57 @@ public class Mario {
 		//automático
 		Position pos;
 		if(this.actions.size() == 0) {
-			if(this.derecha) pos = new Position(1, 0);
+			if(this.direccion == Action.RIGHT) pos = new Position(1, 0);
 			else pos = new Position(-1, 0);
-			if(this.MarioColisiona(listLand, new Position(0,1))) {
-				if(this.MarioColisiona(listLand, pos) || this.pos.EsBorde(this.derecha)) {
-					this.derecha = !this.derecha;
-					if(this.derecha) pos = new Position(1, 0);
+			if(this.MarioColisiona(listLand, new Position(0,1)) && this.direccion != Action.STOP) {
+				if(this.MarioColisiona(listLand, pos) || this.pos.EsBorde(this.direccion == Action.RIGHT)) {
+					if(this.direccion == Action.RIGHT) this.direccion = Action.LEFT;
+					else if (this.direccion == Action.LEFT) this.direccion = Action.RIGHT;
+					if(this.direccion == Action.RIGHT) pos = new Position(1, 0);
 					else pos = new Position(-1, 0);
 				}
-				this.cambiarPos(this.pos.sumar(pos));
+				else this.cambiarPos(this.pos.sumar(pos));
 			}
 			else {
 				if(this.pos.estaAbajo()) {
-					for(int i = 0; i < 3; i++) this.game.perderVida();//hacemos que muera al instante si se cae
+					this.game.perderVida();
+					this.game.resetGame();
 				}
-				else this.cambiarPos(this.pos.sumar(new Position(0, 1)));
+				else if (this.direccion != Action.STOP) this.cambiarPos(this.pos.sumar(new Position(0, 1)));
 			}
 		}
 		else {
 			this.actions.restricciones();
 			for(int i = 0; i < this.actions.size(); i++) {
 				pos = new Position(this.actions.getX(i), this.actions.getY(i));
-				
-				if(this.pos.estaAbajo() && new Position(0, 1).equals(pos)) {
+				if(pos.equals(new Position(0, 1))) {
+					if (this.MarioColisiona(listLand, new Position(0, 1))) this.direccion = Action.STOP;
+					while(!this.MarioColisiona(listLand, new Position(0, 1)) && !this.pos.estaAbajo()) {
+						this.cambiarPos(this.pos.sumar(new Position(0, 1)));
+					}
 					if(this.pos.estaAbajo()) {
-						for(int j = 0; j < 3; j++) this.game.perderVida();//hacemos que muera al instante si se cae
+						this.game.perderVida();
+						if(this.game.numLives()>0) {
+							this.game.resetGame();
+							this.game.resetGame();
+						}
 					}
 				}
-				if(!this.MarioColisiona(listLand, pos)) {
+				else if(!this.MarioColisiona(listLand, pos)) {
 					this.cambiarPos(this.pos.sumar(pos));
 				}
-				this.game.doInteractionsFrom(this);
+				else if(pos.equals(new Position(1, 0))) this.direccion = Action.LEFT;
+				else if(pos.equals(new Position(-1, 0))) this.direccion = Action.RIGHT;
 			}
 		}
+		this.game.doInteractionsFrom(this);
+		this.cayendo = false;
 		this.actions = new ActionList();
 	}
 	
 	public boolean MarioColisiona(List <Land> listLand, Position pos) {
 		for(Land land: listLand) {
-			if(this.big) {
+			if(this.big == true) {
 				if(land.estaEnPos(this.pos.sumar(pos)) || land.estaEnPos(this.posGrande.sumar(pos))) {
 					return true;
 				}
@@ -89,14 +103,17 @@ public class Mario {
 	
 	public boolean interactWith (Goomba goomba) {
 		boolean hayContacto = false;
-		if(goomba.estaEnPos(this.pos)) {
+		if(goomba.estaEnPos(this.pos) || (this.big && goomba.estaEnPos(this.posGrande))) {
 			if(this.big && !this.cayendo) {
 				this.big = false;
 				this.posGrande = null;
 			}
-			else if (!this.cayendo) this.game.perderVida();
-			game.sumar100();
+			else if (!this.cayendo) {
+				this.game.perderVida();
+				this.game.resetGame();
+			}
 			goomba.recieveInteraction(this);
+			game.sumar100();
 			hayContacto = true;
 		}
 		return hayContacto;
@@ -104,34 +121,40 @@ public class Mario {
 	
 	public void cambiarPos(Position pos) {
 		if(pos.esValida() && pos.sumar(new Position (0, -1)).esValida()) {
-			this.parado = true;
-			this.cayendo = false;
 			if(this.pos.enDerechaDe(pos)) {
-				this.derecha = false;
-				this.parado = false;
+				this.direccion = Action.LEFT;
 			}
 			else if (this.pos.enIzquierdaDe(pos)){
-				this.derecha = true;
-				this.parado = false;
+				this.direccion = Action.RIGHT;
 			}
 			else if (this.pos.encimaDe(pos)) this.cayendo = true;
+			else if (this.pos.equals(pos)) this.direccion = Action.STOP;
 			this.pos = new Position(pos);
 			if(this.big) this.posGrande = new Position(pos.sumar(new Position (0, -1)));
-			
+		}
+	}
+	
+	public void resetMario(Position pos) {
+		if(pos.esValida() && pos.sumar(new Position (0, -1)).esValida()) {
+			this.direccion = Action.RIGHT;
+			this.big = true;
+			this.cayendo = false;
+			this.pos = new Position(pos);
+			this.posGrande = new Position(pos.sumar(new Position (0, -1)));
 		}
 	}
 	
 	//operaciones de mario
 	public String getIcon() {
-		String aux;
-		if(this.parado) {
+		String aux = "";
+		if(this.direccion == Action.STOP) {
 			aux = Messages.MARIO_STOP;
 		}
-		else {
-			if(this.derecha) {
-				aux = Messages.MARIO_RIGHT;
-			}
-			else aux = Messages.MARIO_LEFT;
+		else if(this.direccion == Action.RIGHT) {
+			aux = Messages.MARIO_RIGHT;
+		}
+		else if (this.direccion == Action.LEFT) {
+			aux = Messages.MARIO_LEFT;
 		}
 		return aux;
 	}
@@ -141,9 +164,9 @@ public class Mario {
 			this.pos = new Position(pos);
 			this.posGrande = new Position(pos.sumar(new Position (0, -1)));
 		}
-		this.derecha = true;
+		this.direccion = Action.RIGHT;
 		this.big = true;
-		this.parado = false;
+		this.cayendo = false;
 	}
 	
 	@Override
@@ -156,6 +179,10 @@ public class Mario {
 	}
 	
 	public boolean estaEnPos(Position pos) {
-		return this.pos.equals(pos) || (this.posGrande != null && this.posGrande.equals(pos));
+		return this.pos.equals(pos) || (this.big && this.posGrande.equals(pos));
+	}
+
+	public int numVidas() {
+		return this.game.numLives();
 	}
 }

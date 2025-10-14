@@ -53,6 +53,16 @@ public class GameObjectContainer {
 		}
 		return false;
 	}
+	private boolean hayDosGoombasAqui(Position pos) {
+		int cont = 0;
+		for(Goomba goomba: this.listGoomba) {
+			if(goomba.estaEnPos(pos)) {
+				cont++;
+				if(cont == 2)return true;
+			}
+		}
+		return false;
+	}
 	
 	//mario
 	private Mario mario;
@@ -71,14 +81,17 @@ public class GameObjectContainer {
 	//funciones
 	public String ContainerEnPos(Position pos) {
 		String aux = Messages.EMPTY;
-		if(this.mario.estaEnPos(pos)) {
-			aux = mario.getIcon();
+		if(this.mario.numVidas() > 0 && this.mario.estaEnPos(pos)) {
+			aux += mario.getIcon();
 		}
-		else if(this.door.estaEnPos(pos)) {
-			aux = Messages.EXIT_DOOR;
+		if(this.door.estaEnPos(pos)) {
+			aux += Messages.EXIT_DOOR;
 		}
 		else if(this.hayGoombaAqui(pos)) {
 			aux = Messages.GOOMBA;
+			if(this.hayDosGoombasAqui(pos)) {
+				aux += Messages.GOOMBA;
+			}
 		}
 		else if(this.hayLandAqui(pos)) {
 			aux = Messages.LAND;
@@ -91,6 +104,7 @@ public class GameObjectContainer {
 		if(this.mario.interactWith(door)) {
 			this.mario.marioExited();
 		}
+		this.listGoomba.removeIf(goomba -> !goomba.estaVivo());
 		for(Goomba goomba: this.listGoomba) {
 			goomba.update(this.listLand);
 		}

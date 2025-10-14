@@ -15,7 +15,7 @@ public class Game {
 	private int puntos = 0;
 	private int numVidas = 3;
 	private int nLevel;
-	private Mario mario = new Mario(new Position(0, 12));
+	private Mario mario = new Mario(new Position(0, 1));
 	private boolean partidaGanada = false;
 	private GameObjectContainer GameObjectContainer;
 	
@@ -50,11 +50,12 @@ public class Game {
 		this.GameObjectContainer.add(new Land(new Position(6, 5)));
 		//this.GameObjectContainer.add(new Land(new Position(2, 11)));
 		//Mario y puerta
-		this.mario.cambiarPos(new Position(0, 12));
+		this.mario.resetMario(new Position(0, 12));
 		this.GameObjectContainer.add(this.mario);
 		this.GameObjectContainer.add(new ExitDoor(new Position(29, 12)));
 		//Goombas
 		this.GameObjectContainer.add(new Goomba(new Position(19, 0)));
+		//this.GameObjectContainer.add(new Goomba(new Position(19, 0)));
 		//this.GameObjectContainer.add(new Goomba(new Position(16, 13)));
 	}
 	
@@ -85,7 +86,7 @@ public class Game {
 		this.GameObjectContainer.add(new Land(new Position(7, 9)));
 		this.GameObjectContainer.add(new Land(new Position(6, 5)));
 		//Mario y puerta
-		this.mario.cambiarPos(new Position(0, 12));
+		this.mario.resetMario(new Position(0, 12));
 		this.GameObjectContainer.add(this.mario);
 		this.GameObjectContainer.add(new ExitDoor(new Position(29, 12)));
 		//Goombas
@@ -123,6 +124,7 @@ public class Game {
 	}
 	
 	public void resetGame(int nLevel) {
+		this.tiempoRestante = 100;
 		this.GameObjectContainer = new GameObjectContainer();
 		if(nLevel == 0 || nLevel == 1) {
 			this.inicializarGameObjectContainer(nLevel);
@@ -173,6 +175,7 @@ public class Game {
 	public void update() {
 		this.tiempoRestante--;
 		this.GameObjectContainer.update();
+		if(this.numVidas == 0) this.mario = null;
 		
 	}
 	
@@ -187,6 +190,7 @@ public class Game {
 	public void marioExited() {
 		this.puntos += this.tiempoRestante * 10;
 		this.partidaGanada = true;
+		this.tiempoRestante = 0;
 	}
 	
 	public void sumar100() {
@@ -195,6 +199,11 @@ public class Game {
 	
 	public void perderVida() {
 		if(this.numVidas > 0) numVidas--;
+	}
+	
+	public void restarTiempo() {
+		if(this.tiempoRestante > 0) this.tiempoRestante--;
+		
 	}
 	/*
 	private void initLevel0() {
@@ -240,4 +249,6 @@ public class Game {
 		gameObjects.add(new Goomba(this, new Position(0, 19)));
 	}
 	*/
+
+
 }

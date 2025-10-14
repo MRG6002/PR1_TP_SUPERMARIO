@@ -33,7 +33,7 @@ public class ActionList {
 			if((der > 0 && action == Action.LEFT) || izq >= 5) this.actionList.set(i, null);
 			else if((izq > 0 && action == Action.RIGHT)|| der >= 5) this.actionList.set(i, null);
 			else if((aba > 0 && action == Action.UP)|| arr >= 5) this.actionList.set(i, null);
-			else if((arr > 0 && action == Action.DOWN)|| aba >= 5) this.actionList.set(i, null);
+			else if((arr > 0 && action == Action.DOWN) || aba >= 5) this.actionList.set(i, null);
 		}
 		this.actionList.removeIf(action -> action == null);
 	}

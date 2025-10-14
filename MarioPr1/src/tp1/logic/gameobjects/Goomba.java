@@ -45,7 +45,7 @@ public class Goomba {
 				if(this.izquierda) pos = new Position(-1, 0);
 				else pos = new Position(1, 0);
 			}
-			this.cambiarPos(this.pos.sumar(pos));
+			else this.cambiarPos(this.pos.sumar(pos));
 		}
 		else {
 			if(this.pos.estaAbajo()) {
@@ -65,12 +65,8 @@ public class Goomba {
 	}
 	
 	public boolean recieveInteraction(Mario mario) {
-		boolean hayContacto = false;
-		if(mario.estaEnPos(this.pos)) {
-			this.vivo = false;
-			hayContacto = true;
-		}
-		return hayContacto;
+		this.vivo = false;
+		return true;
 	}
 	
 	@Override
